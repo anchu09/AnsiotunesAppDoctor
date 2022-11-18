@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="516.0" prefWidth="791.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="db.GUI.ConsultDataController">
+   <children>
+      <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="451.0" prefWidth="697.0" VBox.vgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="516.0" fitWidth="810.0" layoutX="-16.0" layoutY="-1.0" pickOnBounds="true">
+               <image>
+                  <Image url="@backgrounds/laboratorio.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="backfromstatistics" layoutX="700.0" layoutY="467.0" mnemonicParsing="false" onAction="#backfromstatistics" prefHeight="43.0" prefWidth="79.0" text="Back">
+               <font>
+                  <Font name="Times New Roman" size="15.0" />
+               </font>
+            </Button>
+            <Label fx:id="reportsLabel" layoutX="30.0" layoutY="36.0" text="Reports: " visible="false">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="choiceBoxReports" layoutX="147.0" layoutY="44.0" prefHeight="29.0" prefWidth="183.0" visible="false" />
+            <LineChart fx:id="lineChart" createSymbols="false" layoutX="330.0" layoutY="111.0" legendVisible="false" prefHeight="356.0" prefWidth="432.0" visible="false">
+               <xAxis>
+                  <CategoryAxis fx:id="daysAxis" side="BOTTOM" />
+               </xAxis>
+               <yAxis>
+                  <NumberAxis fx:id="numAxis" side="LEFT" />
+               </yAxis>
+            </LineChart>
+            <Button fx:id="edabut" disable="true" layoutX="85.0" layoutY="175.0" mnemonicParsing="false" onAction="#EDAButton" prefHeight="81.0" prefWidth="183.0" text="EDA" visible="false">
+               <font>
+                  <Font name="Times New Roman" size="17.0" />
+               </font>
+            </Button>
+            <Button fx:id="ecgbut" disable="true" layoutX="85.0" layoutY="308.0" mnemonicParsing="false" onAction="#ECGButton" prefHeight="81.0" prefWidth="183.0" text="ECG" visible="false">
+               <font>
+                  <Font name="Times New Roman" size="17.0" />
+               </font>
+            </Button>
+            <Label fx:id="scoreLabel" layoutX="30.0" layoutY="100.0" prefHeight="35.0" prefWidth="103.0" text="Score:" visible="false">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Label>
+            <Button fx:id="usarPantallaBut" layoutX="631.0" layoutY="23.0" mnemonicParsing="false" onAction="#usarPantalla" prefHeight="43.0" prefWidth="117.0" text="Consult data">
+               <font>
+                  <Font name="Times New Roman" size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
