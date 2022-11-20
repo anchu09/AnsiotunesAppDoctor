@@ -93,7 +93,7 @@ public class ConsultDataController {
 
 		// plotTittle.setText("ECG for " + choiceBoxReports.getValue());
 		lineChart.setTitle("ECG for " + choiceBoxReports.getValue());
-		ArrayList<Integer> datos = leerfichero("../Ansiotunes/reports/" + choiceBoxReports.getValue(), "ecg");
+		ArrayList<Integer> datos = leerfichero("../AnsiotunesAppDoctor/reports/" + choiceBoxReports.getValue(), "ecg");
 		series = new XYChart.Series();
 		series.getData().clear();
 		lineChart.getData().clear();
@@ -116,7 +116,7 @@ public class ConsultDataController {
 
 		// plotTittle.setText("EDA for " + choiceBoxReports.getValue());
 		
-		ArrayList<Integer> datos = leerfichero("../Ansiotunes/reports/" + choiceBoxReports.getValue(), "eda");
+		ArrayList<Integer> datos = leerfichero("../AnsiotunesAppDoctor/reports/" + choiceBoxReports.getValue(), "eda");
 		series = new XYChart.Series();
 		lineChart.getData().clear();
 		series.getData().clear();

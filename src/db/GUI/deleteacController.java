@@ -37,6 +37,23 @@ public class deleteacController {
 
 	@FXML
 	void delete(ActionEvent event) {
+		
+		Main.getUserman().connect();
+		String user = modifyusername.getText();
+		String password = oldpastf.getText();
+		User u = Main.getUserman().checkPassword(user, password);
+		
+		if(u==null ||u.getRole().getName().equals("patient")) {
+			JOptionPane.showMessageDialog(null, "Wrong user name or password");
+			return;
+		}
+
+		if (user.equals(" ") || password.equals(" ")||user.equals("")||password.equals("")) {
+			JOptionPane.showMessageDialog(null, "Empty fields");
+			return;
+		}
+
+		
 		if (!oldpastf.getText().equals("") && !newpasstf.getText().equals("") && !modifyusername.getText().equals("")) {
 			if (oldpastf.getText().equals(newpasstf.getText())) {
 
@@ -45,6 +62,7 @@ public class deleteacController {
 				Main.getUserman().connect();
 				
 				List<Integer> userBorrar= Main.getUserman().deleteUser(modifyusername.getText(), oldpastf.getText());
+				
 
 				Main.getUserman().disconnect();
 				Main.getInter().connect();

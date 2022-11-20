@@ -45,8 +45,8 @@ public class MainMenuController implements Initializable {
 	@FXML
 	void OnSignUpClick(ActionEvent event) {
 
-		String name = "ChooseSignUpView.fxml";
-		ChooseSignUpController controller = null;
+		String name = "SignUpDoctorView.fxml";
+		SignUpDoctorController controller = null;
 		openWindow(name, controller, "Choose user");
 
 	}
@@ -59,7 +59,6 @@ public class MainMenuController implements Initializable {
 
 		} catch (URISyntaxException ex) {
 			JOptionPane.showMessageDialog(null, "Error.");
-
 
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Error.");
@@ -84,7 +83,12 @@ public class MainMenuController implements Initializable {
 		String password = PasswordTextField.getText();
 		User u = Main.getUserman().checkPassword(user, password);
 
-		if (u == null) {
+		if (user.equals(" ") || password.equals(" ")||user.equals("")||password.equals("")) {
+			JOptionPane.showMessageDialog(null, "Empty fields");
+			return;
+		}
+
+		else if (u == null) {
 			JOptionPane.showMessageDialog(null, "Wrong user name or password.");
 
 			return;
@@ -132,52 +136,19 @@ public class MainMenuController implements Initializable {
 			}
 		} else if (u.getRole().getName().equalsIgnoreCase("patient")) {
 
-			String name = "PatMenuView.fxml";
-			PatMenuController controller = null;
-			byte[] image = null;
-			try {
-				Pane root0 = (Pane) this.PasswordTextField.getScene().getRoot();
+			// Doctor can't login as a patient, but we should not tell the doctor that this
+			// password and user exist, perhaps
+			// is not the doctor account as a patient, but another patient account->
+			// privacy.
+			JOptionPane.showMessageDialog(null, "Wrong user name or password.");
 
-				ColorAdjust adj = new ColorAdjust(0, -0.9, -0.5, 0);
-
-				GaussianBlur blur = new GaussianBlur(10);
-				adj.setInput(blur);
-				root0.setEffect(adj);
-				FXMLLoader loader = new FXMLLoader(getClass().getResource(name));
-				Parent root;
-
-				root = loader.load();
-
-				controller = loader.getController();
-				controller.setP(Main.getInter().getPatByUser(u));
-				controller.setPatName(Main.getInter().getPatByUser(u).getName());
-
-				Scene scene = new Scene(root);
-				Stage stage = new Stage();
-				stage.setResizable(false);
-				stage.setTitle("Patient menu");
-
-				stage.initModality(Modality.APPLICATION_MODAL);
-				stage.setScene(scene);
-				stage.getIcons().add(new Image(
-						"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrdhgX8t_xOqHLNFJTcdUaEMCyc5-NwN7dhQ&usqp=CAU"));
-
-				stage.showAndWait();
-				root0.setEffect(null);
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
-
 	}
 
 	void openWindow(String name, Object controller, String title) {
 		try {
-		
+
 			Pane root0 = (Pane) this.PasswordTextField.getScene().getRoot();
-			
 
 			ColorAdjust adj = new ColorAdjust(0, -0.9, -0.5, 0);
 
@@ -202,7 +173,6 @@ public class MainMenuController implements Initializable {
 			stage.showAndWait();
 
 			root0.setEffect(null);
-			
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

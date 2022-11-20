@@ -129,6 +129,7 @@ public class SignUpDoctorController implements Initializable {
 	void oncreateuser(ActionEvent event) {
 		String doctoremail = EmaDcotorText.getText();
 		String doctorPassword = pasDoctorTxtF.getText();
+		
 		if (!doctoremail.equals("") && !doctorPassword.equals("") && !RepeatPassword.getText().equals("")
 				&& !NameTextField.getText().equals("") && !ColNumTextField.getText().equals("")
 				&& !HospitalTextField.getText().equals("")) {

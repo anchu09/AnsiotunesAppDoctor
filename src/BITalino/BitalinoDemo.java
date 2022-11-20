@@ -9,7 +9,7 @@ import java.util.Vector;
 
 import javax.bluetooth.RemoteDevice;
 
-import db.GUI.StartMeasurementsController;
+
 import db.pojos.Patient;
 
 import java.util.logging.Level;
