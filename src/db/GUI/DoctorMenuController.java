@@ -1,7 +1,14 @@
 
 package db.GUI;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import db.pojos.Doctor;
 import javafx.event.ActionEvent;
@@ -45,9 +52,34 @@ public class DoctorMenuController {
 
 	@FXML
 	private Button ModifyData;
+	
+	
+	PrintWriter printWriter = null;
+	InputStream inputStream = null;
+	BufferedReader bufferedReader = null;
+	OutputStream outputStream = null;
 
 	@FXML
 	void OnModifyData(ActionEvent event) {
+		
+		
+		try {
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+			inputStream = Main.getSocket().getInputStream();
+
+			outputStream = Main.getSocket().getOutputStream();
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		
+		
+		
+		
 		String name = "ModifyDoctorDataView.fxml";
 		ModifyDoctorDataController controller = null;
 		try {
@@ -68,7 +100,18 @@ public class DoctorMenuController {
 			controller.setOldName(d.getName());
 			controller.setOldColNum(d.getCollegiate_number());
 			controller.setOldHospi(d.getHospital());
-			controller.setOldusername(Main.getInter().getUserMailbydoctor(d));
+			
+			
+			
+			printWriter.println("setOlduserDoc");
+			printWriter.println(d.toString());
+								
+			
+			String username= bufferedReader.readLine();
+			
+			controller.setOldusername(username);			
+			
+			
 			Scene scene = new Scene(root);
 
 			Stage stage = new Stage();
@@ -88,7 +131,6 @@ public class DoctorMenuController {
 			e.printStackTrace();
 		}
 
-		this.DoctorName.setText(Main.getInter().getDoctor(d.getId()).getName());
 	}
 
 	@FXML
@@ -189,6 +231,34 @@ public class DoctorMenuController {
 
 	public void setModifyData(Button modifyData) {
 		ModifyData = modifyData;
+	}
+	
+	
+	
+	private static void releaseResourcesClient(PrintWriter printWriter, BufferedReader bufferedReader,
+			OutputStream outputStream, InputStream inputStream ) {
+		try {
+			printWriter.close();
+		} catch (Exception ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			bufferedReader.close();
+		} catch (Exception ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		try {
+			outputStream.close();
+		} catch (IOException ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			inputStream.close();
+		} catch (IOException ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
 	}
 
 }

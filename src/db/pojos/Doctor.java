@@ -16,6 +16,7 @@ public class Doctor implements Serializable{
 	private String name;
 	private String collegiate_number;
 	private String hospital;
+	private ArrayList<Patient>patients;
 	
 
 	public Doctor() {
@@ -45,7 +46,24 @@ public class Doctor implements Serializable{
 		this.collegiate_number = collegiate_number;
 		this.hospital = hospital;
 	}
+	public Doctor(String toString) {
+		super();
+		
+	this.id= Integer.parseInt(toString.substring(toString.indexOf("id=")+3,toString.indexOf(", na")));
+	this.name=toString.substring(toString.indexOf("me=")+3,toString.indexOf(", co"));
+	this.collegiate_number=toString.substring(toString.indexOf("er=")+3,toString.indexOf(", ho"));
+	this.hospital=toString.substring(toString.indexOf("al=")+3,toString.indexOf(", pa"));
 
+		
+	}
+	
+	@Override
+	public String toString() {
+		return "Doctor [id=" + id + ", name=" + name + ", collegiate_number=" + collegiate_number + ", hospital="
+				+ hospital + ", patients=" + patients + "]";
+		
+		
+	}
 	
 
 
@@ -96,12 +114,6 @@ public class Doctor implements Serializable{
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "Doctor [id=" + id + ", name=" + name + 
-				 ", collegiate_number=" + collegiate_number + ", hospital=" + hospital + "]";
-	}
-
 
 
 
@@ -147,6 +159,14 @@ public class Doctor implements Serializable{
 	
 	public void setHospital(String hospital) {
 		this.hospital = hospital;
+	}
+
+	public ArrayList<Patient> getPatients() {
+		return patients;
+	}
+
+	public void setPatients(ArrayList<Patient> patients) {
+		this.patients = patients;
 	}
 
 

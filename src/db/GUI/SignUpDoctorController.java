@@ -1,10 +1,19 @@
 package db.GUI;
 
+import java.awt.HeadlessException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
@@ -61,28 +70,16 @@ public class SignUpDoctorController implements Initializable {
 	@FXML
 	private Label repeatLabel;
 
+	PrintWriter printWriter = null;
+	InputStream inputStream = null;
+	BufferedReader bufferedReader = null;
+	OutputStream outputStream = null;
+
 	User u;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
-	}
-
-	@FXML
-	void OnAcceptClick(ActionEvent event) {
-
-		String name = NameTextField.getText();
-
-		String colnum = ColNumTextField.getText();
-		String hospital = HospitalTextField.getText();
-
-		int id = 0;
-		byte[] image = null;
-		Doctor d_new = new Doctor(name, colnum, hospital);
-		Main.getInter().addDoctorUser(d_new, u);
-
-		Stage stage = (Stage) this.NameTextField.getScene().getWindow();
-		stage.close();
 	}
 
 	public boolean validateName(String name) {
@@ -127,9 +124,24 @@ public class SignUpDoctorController implements Initializable {
 
 	@FXML
 	void oncreateuser(ActionEvent event) {
+
+		try {
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+			inputStream = Main.getSocket().getInputStream();
+
+			outputStream = Main.getSocket().getOutputStream();
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+
 		String doctoremail = EmaDcotorText.getText();
 		String doctorPassword = pasDoctorTxtF.getText();
-		
+
 		if (!doctoremail.equals("") && !doctorPassword.equals("") && !RepeatPassword.getText().equals("")
 				&& !NameTextField.getText().equals("") && !ColNumTextField.getText().equals("")
 				&& !HospitalTextField.getText().equals("")) {
@@ -137,40 +149,39 @@ public class SignUpDoctorController implements Initializable {
 
 			if (doctorPassword.equals(RepeatPassword.getText()) && correctData == true) {
 
-				Main.getUserman().connect();
+				printWriter.println("checkEmail");
+				printWriter.println(EmaDcotorText.getText());
 
-				if (Main.getUserman().checkEmail(doctoremail)) {
-					JOptionPane.showMessageDialog(null, "Email already used, try to log in");
+				try {
+					if (Boolean.parseBoolean(bufferedReader.readLine())) {
+						JOptionPane.showMessageDialog(null, "Email already used, try to log in");
 
-				} else {
-					try {
-						Main.getInter().disconnect();
-						Role role = Main.getUserman().getRole(1);
+					} else {
+						try {
 
-						MessageDigest md = MessageDigest.getInstance("MD5");
-						md.update(doctorPassword.getBytes());
-						byte[] hash = md.digest();
-						User u = new User(doctoremail, hash, role);
+							String name = NameTextField.getText();
+							String colnum = ColNumTextField.getText();
+							String hospital = HospitalTextField.getText();
 
-						Main.getUserman().newUser(u);
-						Main.getInter().connect();
+							int id = 0;
+							Doctor d_new = new Doctor(name, colnum, hospital);
+							printWriter.println("oncreateuserDoc");
 
-						String name = NameTextField.getText();
-						String colnum = ColNumTextField.getText();
-						String hospital = HospitalTextField.getText();
+							printWriter.println(d_new.toString());
+							printWriter.println(doctoremail);
+							printWriter.println(doctorPassword);
 
-						int id = 0;
-						Doctor d_new = new Doctor(name, colnum, hospital);
-						Main.getInter().addDoctorUser(d_new, u);
-						Doctor dlast = Main.getInter().getLastDoctor();
+							JOptionPane.showMessageDialog(null, "Doctor registered. ");
+							Stage stage = (Stage) this.NameTextField.getScene().getWindow();
+							stage.close();
 
-						JOptionPane.showMessageDialog(null, "Doctor registered. ");
-						Stage stage = (Stage) this.NameTextField.getScene().getWindow();
-						stage.close();
-
-					} catch (Exception e) {
-						e.printStackTrace();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
+				} catch (HeadlessException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 			} else {
@@ -188,6 +199,32 @@ public class SignUpDoctorController implements Initializable {
 	void OnCancelClick(ActionEvent event) {
 		Stage stage = (Stage) this.NameTextField.getScene().getWindow();
 		stage.close();
+	}
+
+	private static void releaseResourcesClient(PrintWriter printWriter, BufferedReader bufferedReader,
+			OutputStream outputStream, InputStream inputStream) {
+		try {
+			printWriter.close();
+		} catch (Exception ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			bufferedReader.close();
+		} catch (Exception ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		try {
+			outputStream.close();
+		} catch (IOException ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			inputStream.close();
+		} catch (IOException ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
 	}
 
 }

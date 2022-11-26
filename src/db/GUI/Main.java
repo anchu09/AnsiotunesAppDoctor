@@ -2,15 +2,14 @@ package db.GUI;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 
-import db.interfaces.Ans_manager;
-import db.interfaces.UserManager;
-import db.jdbc.JDBCManagment;
-import db.jpa.JPAUserManagment;
+import javax.swing.JOptionPane;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -19,13 +18,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
 public class Main extends Application {
-	private static UserManager userman = new JPAUserManagment();
-	private static Connection c;
 
-	private static Ans_manager inter = new JDBCManagment();
-	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	
+	 static Socket socket= null;
+
 	
 	/* POSIBLE ERROR :
 	 
@@ -39,39 +34,22 @@ public class Main extends Application {
 	
 	
 	*/
+		public static Socket getSocket() {
+
+			return socket;
 	
-	public static void connect() {
-		try {
-
-			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:./database/ansiotunes.database");
-			c.createStatement().execute("PRAGMA foreign_keys = ON");
-			System.out.println("Database connection opened");
-			inter.creatTables();
-		} catch (SQLException E) {
-			System.out.println("There was a database exception.");
-			E.printStackTrace();
-		} catch (Exception e) {
-			System.out.println("There was a general exception.");
-			e.printStackTrace();
-		}
-
 	}
 
-	public static UserManager getUserman() {
-		return userman;
+	public void setSocket(Socket socket) {
+		this.socket = socket;
 	}
 
-	public static void setUserman(UserManager userman) {
-		Main.userman = userman;
-	}
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			// getUserman().connect();
+			 socket = new Socket("localHost",9000);
 
-			getInter().connect();
 
 			Pane root = (Pane) FXMLLoader.load(getClass().getResource("MainMenuView.fxml"));
 			Scene scene = new Scene(root);
@@ -89,19 +67,14 @@ public class Main extends Application {
 
 			primaryStage.show();
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Server inactive.");
+
 		}
 	}
 
 	public static void main(String[] args) {
 		launch(args);
 	}
-
-	public static Ans_manager getInter() {
-		return inter;
-	}
-
-	public static void setInter(Ans_manager inter) {
-		Main.inter = inter;
-	}
 }
+

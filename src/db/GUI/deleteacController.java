@@ -1,9 +1,19 @@
 package db.GUI;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import db.pojos.users.Role;
 import db.pojos.users.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,21 +44,72 @@ public class deleteacController {
 		Stage stage = (Stage) this.showNew.getScene().getWindow();
 		stage.close();
 	}
+	
+	PrintWriter printWriter = null;
+	InputStream inputStream = null;
+	BufferedReader bufferedReader = null;
+	OutputStream outputStream = null;
 
 	@FXML
 	void delete(ActionEvent event) {
 		
-		Main.getUserman().connect();
-		String user = modifyusername.getText();
+		
+		try {
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+			inputStream = Main.getSocket().getInputStream();
+
+			outputStream = Main.getSocket().getOutputStream();
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		
+		
+		String uText = modifyusername.getText();
 		String password = oldpastf.getText();
-		User u = Main.getUserman().checkPassword(user, password);
+		
+		printWriter.println("checkPassword");
+		printWriter.println(uText);
+		printWriter.println(password);
+		
+		String mail = null;
+		String rolename = null;
+		String idText = null;
+		Integer id = null;
+		User u = null;
+		try {
+
+			rolename = bufferedReader.readLine();
+			Role r = new Role(rolename);
+
+			String userText = bufferedReader.readLine();
+			System.out.println(userText);
+			u = new User(userText, r);
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (NumberFormatException ex2) {
+			// TODO Auto-generated catch block
+
+			u = null;
+		}
+		
+		
+		
+		
+		
 		
 		if(u==null ||u.getRole().getName().equals("patient")) {
 			JOptionPane.showMessageDialog(null, "Wrong user name or password");
 			return;
 		}
 
-		if (user.equals(" ") || password.equals(" ")||user.equals("")||password.equals("")) {
+		if (uText.equals(" ") || password.equals(" ")||uText.equals("")||password.equals("")) {
 			JOptionPane.showMessageDialog(null, "Empty fields");
 			return;
 		}
@@ -57,17 +118,9 @@ public class deleteacController {
 		if (!oldpastf.getText().equals("") && !newpasstf.getText().equals("") && !modifyusername.getText().equals("")) {
 			if (oldpastf.getText().equals(newpasstf.getText())) {
 
-				
-				Main.getInter().disconnect();
-				Main.getUserman().connect();
-				
-				List<Integer> userBorrar= Main.getUserman().deleteUser(modifyusername.getText(), oldpastf.getText());
-				
-
-				Main.getUserman().disconnect();
-				Main.getInter().connect();
-				Main.getInter().deletePersonByUserId(userBorrar);
-				
+				printWriter.println("delete");
+				printWriter.println(uText);
+				printWriter.println(password);
 				Stage stage = (Stage) this.showNew.getScene().getWindow();
 				stage.close();
 
@@ -96,4 +149,31 @@ public class deleteacController {
 		showNew.setVisible(false);
 	}
 
+	
+	private static void releaseResourcesClient(PrintWriter printWriter, BufferedReader bufferedReader,
+			OutputStream outputStream, InputStream inputStream ) {
+		try {
+			printWriter.close();
+		} catch (Exception ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			bufferedReader.close();
+		} catch (Exception ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		try {
+			outputStream.close();
+		} catch (IOException ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			inputStream.close();
+		} catch (IOException ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+	}
+	
 }

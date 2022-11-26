@@ -33,11 +33,35 @@ public class Role implements Serializable{
 		super();
 		this.name = name;
 		this.users = new ArrayList<User>();
+	}	
+	
+	public Role(Integer id, String name, List<User> users) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.users = users;
+	}
+	
+	
+	public Role(String toString,List<User> users) {
+		super();
+
+		
+		this.id= Integer.parseInt(toString.substring(toString.indexOf("id=")+3,toString.indexOf(", na")));
+		this.name=toString.substring(toString.indexOf("me=")+3,toString.indexOf(", us"));
+
+	}
+	
+	@Override
+	public String toString() {
+		return "Role [id=" + id + ", name=" + name + ", users=" + users + "]";
 	}
 
 	public Integer getId() {
 		return id;
 	}
+	
+	
 	
 	public void setId(Integer id) {
 		this.id = id;
@@ -84,10 +108,11 @@ public class Role implements Serializable{
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "Role [id=" + id + ", name=" + name + "]";
-	}
+
+
+
+
+
 	
 	
 	

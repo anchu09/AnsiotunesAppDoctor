@@ -26,7 +26,20 @@ public Report(String direction, Date reportDate, int patientID) {
 	this.reportDate = reportDate;
 	this.patientID = patientID;
 }
+public Report(String toString) {
+	this.id= Integer.parseInt(toString.substring(toString.indexOf("id=")+3,toString.indexOf(", di")));
+	this.direction=toString.substring(toString.indexOf("on=")+3,toString.indexOf(", re"));
+//	this.reportDate=Date.parse(toString.substring(toString.indexOf("te="),toString.indexOf(", pat")));
+	this.patientID= Integer.parseInt(toString.substring(toString.indexOf("ID=")+3,toString.indexOf("]")));
 
+}
+
+
+@Override
+public String toString() {
+	return "Report [id=" + id + ", direction=" + direction + ", reportDate=" + reportDate + ", patientID=" + patientID
+			+ "]";
+}
 
 public int getId() {
 	return id;
@@ -52,13 +65,7 @@ public int getPatientID() {
 public void setPatientID(int patientID) {
 	this.patientID = patientID;
 }
-@Override
-public String toString() {
-	return "reports [id=" + id + ", direction=" + direction + ", reportDate=" + reportDate + ", patientID=" + patientID
-			+ ", getId()=" + getId() + ", getDirection()=" + getDirection() + ", getReportDate()=" + getReportDate()
-			+ ", getPatientID()=" + getPatientID() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
-			+ ", toString()=" + super.toString() + "]";
-}
+
 	
 	
 }

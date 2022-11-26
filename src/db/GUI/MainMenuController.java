@@ -1,7 +1,13 @@
 package db.GUI;
 
 import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -11,7 +17,10 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import db.pojos.Doctor;
+import db.pojos.users.Role;
 import db.pojos.users.User;
 
 import javafx.event.ActionEvent;
@@ -35,10 +44,31 @@ public class MainMenuController implements Initializable {
 	@FXML
 	private Label labelDate;
 
+	PrintWriter printWriter = null;
+	InputStream inputStream = null;
+	BufferedReader bufferedReader = null;
+	OutputStream outputStream = null;
+	
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
 		this.labelDate.setText("" + Date.valueOf(LocalDate.now()));
+		
+		
+		try {
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+			inputStream = Main.getSocket().getInputStream();
+
+			outputStream = Main.getSocket().getOutputStream();
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
 
 	}
 
@@ -55,7 +85,7 @@ public class MainMenuController implements Initializable {
 	void opengit(MouseEvent event) {
 		try {
 
-			Desktop.getDesktop().browse(new URI("https://github.com/anchu09/Ansiotunes"));
+			Desktop.getDesktop().browse(new URI("https://github.com/manolin20/AnsiotunesAppDoctor"));
 
 		} catch (URISyntaxException ex) {
 			JOptionPane.showMessageDialog(null, "Error.");
@@ -68,21 +98,72 @@ public class MainMenuController implements Initializable {
 
 	@FXML
 	void onClose(ActionEvent event) {
+		
+	
+		
+		
 		Stage stage = (Stage) this.PasswordTextField.getScene().getWindow();
 
 		stage.close();
-
-		Main.getInter().disconnect();
+		releaseResourcesClient(printWriter, bufferedReader, outputStream, inputStream, Main.getSocket());
 		System.exit(0);
 	}
 
 	@FXML
 	void OnEnterUser(ActionEvent event) {
-		Main.getUserman().connect();
+		
+		
+		
+		try {
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+			inputStream = Main.getSocket().getInputStream();
+
+			outputStream = Main.getSocket().getOutputStream();
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		
 		String user = UserTextField.getText();
 		String password = PasswordTextField.getText();
-		User u = Main.getUserman().checkPassword(user, password);
 
+		
+		
+		printWriter.println("checkPassword");
+		printWriter.println(user);
+
+		printWriter.println(password);
+		
+		
+		
+		String mail = null;
+		String rolename = null;
+		String idText = null;
+		Integer id = null;
+		User u = null;
+		try {
+
+			rolename = bufferedReader.readLine();
+			Role r = new Role(rolename);
+
+			String userText = bufferedReader.readLine();
+			System.out.println(userText);
+			u = new User(userText, r);
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (NumberFormatException ex2) {
+			// TODO Auto-generated catch block
+
+			u = null;
+		}
+		
+		
 		if (user.equals(" ") || password.equals(" ")||user.equals("")||password.equals("")) {
 			JOptionPane.showMessageDialog(null, "Empty fields");
 			return;
@@ -106,16 +187,48 @@ public class MainMenuController implements Initializable {
 				root0.setEffect(adj);
 
 				FXMLLoader loader = new FXMLLoader(getClass().getResource(name));
-				Doctor d = Main.getInter().getDoctorbyUser(u);
 
+				
+				
+				
+				
+				
+				
 				Parent root;
 
 				root = loader.load();
 
 				controller = loader.getController();
-				controller.setD(d);
+				
+				
 
-				controller.setDoctorName(d.getName());
+				try {
+
+					printWriter.println("getDoctorbyUser");
+					printWriter.println(u.getRole().getName());
+					printWriter.println(u.toString());
+
+
+					
+					
+					
+					String dString = bufferedReader.readLine();
+			
+
+					Doctor d = new Doctor(dString);
+
+					controller.setD(d);
+
+					controller.setDoctorName(d.getName());
+				} catch (NullPointerException ex) {
+					System.out.println("holaaa");
+				}
+				
+				
+				
+				
+				
+			
 
 				Scene scene = new Scene(root);
 				Stage stage = new Stage();
@@ -219,6 +332,38 @@ public class MainMenuController implements Initializable {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	
+	private static void releaseResourcesClient(PrintWriter printWriter, BufferedReader bufferedReader,
+			OutputStream outputStream, InputStream inputStream, Socket socket) {
+		try {
+			printWriter.close();
+		} catch (Exception ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			bufferedReader.close();
+		} catch (Exception ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		try {
+			outputStream.close();
+		} catch (IOException ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			inputStream.close();
+		} catch (IOException ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		try {
+			socket.close();
+		} catch (IOException ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 

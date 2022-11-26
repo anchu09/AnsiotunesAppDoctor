@@ -23,6 +23,7 @@ public class Patient implements Serializable{
 	private String ID;
 	private String favSong;
 	private float score;
+	private ArrayList<Doctor> doctors;
 	
 	
 	
@@ -51,6 +52,23 @@ public class Patient implements Serializable{
 		this.favSong = favSong;
 		this.score = score;
 	}
+	public Patient( String toString) {
+		super();
+		
+		this.id= Integer.parseInt(toString.substring(toString.indexOf("id=")+3,toString.indexOf(", na")));
+		this.name=toString.substring(toString.indexOf("me=")+3,toString.indexOf(", ID"));
+		this.ID=toString.substring(toString.indexOf("ID=")+3,toString.indexOf(", fa"));
+		this.favSong=toString.substring(toString.indexOf("ng=")+3,toString.indexOf(", sc"));
+		this.score= Float.parseFloat(toString.substring(toString.indexOf("re=")+3,toString.indexOf(", do")));
+
+			
+	}
+	
+	@Override
+	public String toString() {
+		return "Patient [id=" + id + ", name=" + name + ", ID=" + ID + ", favSong=" + favSong + ", score=" + score
+				+ ", doctors=" + doctors + "]";
+	}
 	public Patient(int id, String patientname, String id_real, float score) {
 		
 		this.id=id;
@@ -75,11 +93,7 @@ public class Patient implements Serializable{
 		// TODO Auto-generated method stub
 		return super.clone();
 	}
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return "Name"+this.name;
-	}
+
 	@Override
 	protected void finalize() throws Throwable {
 		// TODO Auto-generated method stub
@@ -117,6 +131,12 @@ public class Patient implements Serializable{
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public ArrayList<Doctor> getDoctors() {
+		return doctors;
+	}
+	public void setDoctors(ArrayList<Doctor> doctors) {
+		this.doctors = doctors;
 	}
 	
 	

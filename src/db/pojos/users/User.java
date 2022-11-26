@@ -35,11 +35,36 @@ public class User implements Serializable{
 		this.password = password;
 		this.role = role;
 	} 
-	public User(String email) {
+	public User(String toString, Role r) {
 		super();
-		this.email = email;
+		this.id= Integer.parseInt(toString.substring(toString.indexOf("id=")+3,toString.indexOf(", em")));
+	this.email=toString.substring(toString.indexOf("il=")+3,toString.indexOf(", pas"));
+//	this.password=toString.substring(toString.indexOf("word="),toString.indexOf(", ro"));
+	this.role=r;
+	
 	
 	} 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", email=" + email + ", password=" + Arrays.toString(password) + ", role=" + role
+				+ "]";
+	}
+	public User(int id,String email, byte[] password, Role role) {
+		super();
+		this.id=id;
+		this.email = email;
+		this.password = password;
+		this.role = role;
+	} 
+
+
+	public User(Integer id, String mail, Role r) {
+		
+		this.id= id;
+		this.email=mail;
+		this.role=r;
+		// TODO Auto-generated constructor stub
+	}
 
 	public Integer getId() {
 		return id;
@@ -98,11 +123,7 @@ public class User implements Serializable{
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", password=" + Arrays.toString(password) + ", role=" + role
-				+ "]";
-	}
+
 	
 	
 }

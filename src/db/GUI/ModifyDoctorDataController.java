@@ -1,7 +1,15 @@
 package db.GUI;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
@@ -57,16 +65,53 @@ public class ModifyDoctorDataController {
 
 	@FXML
 	private TextField showold;
+	
+	
+	PrintWriter printWriter = null;
+	InputStream inputStream = null;
+	BufferedReader bufferedReader = null;
+	OutputStream outputStream = null;
 
 	@FXML
 	void OnAcceptModifyCollegiate(ActionEvent event) {
+		
+		
+		
+		try {
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+			inputStream = Main.getSocket().getInputStream();
+
+			outputStream = Main.getSocket().getOutputStream();
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		
+		
+		
 		String new_colnum = ModifyColNumTextField.getText();
 		if (!new_colnum.equals("")) {
+		
 			dmodif.setCollegiate_number(new_colnum);
 			OldColNum.setText(new_colnum);
 			ModifyColNumTextField.setText("");
-			Main.getInter().modifyDoctor(this.dmodif.getId(), "collegiate_number", new_colnum);
 
+			printWriter.println("modifyDoctor");
+
+			printWriter.println("collegiate_number");
+			printWriter.println(new_colnum);
+
+			printWriter.println(dmodif.toString());
+
+			
+			
+			
+			
+			
 		} else {
 			JOptionPane.showMessageDialog(null, "Empty field");
 
@@ -93,12 +138,41 @@ public class ModifyDoctorDataController {
 
 	@FXML
 	void OnAcceptModifyHospital(ActionEvent event) {
+		
+		
+		
+		try {
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+			inputStream = Main.getSocket().getInputStream();
+
+			outputStream = Main.getSocket().getOutputStream();
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		
+		
+		
 		String new_hospital = ModifyHospitalTextField.getText();
 		if (!new_hospital.equals("")) {
-			dmodif.setCollegiate_number(new_hospital);
+		
+			dmodif.setHospital(new_hospital);
 			OldHospi.setText(new_hospital);
-			ModifyHospitalTextField.setText("");
-			Main.getInter().modifyDoctor(this.dmodif.getId(), "hospital", new_hospital);
+			ModifyColNumTextField.setText("");
+
+			printWriter.println("modifyDoctor");
+
+			printWriter.println("hospital");
+			printWriter.println(new_hospital);
+
+			printWriter.println(dmodif.toString());
+		
+		
+		
 		} else {
 			JOptionPane.showMessageDialog(null, "Empty field");
 
@@ -107,6 +181,25 @@ public class ModifyDoctorDataController {
 
 	@FXML
 	void OnAcceptModifyName(ActionEvent event) {
+		
+		
+		
+		try {
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+			inputStream = Main.getSocket().getInputStream();
+
+			outputStream = Main.getSocket().getOutputStream();
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		
+		
+		
 
 		String new_name = ModifyNameTextField.getText();
 		boolean correctData = true;
@@ -130,8 +223,20 @@ public class ModifyDoctorDataController {
 				OldName.setText(new_name);
 				
 				ModifyNameTextField.setText("");
-				Main.getInter().modifyDoctor(this.dmodif.getId(), "name", new_name);
 
+			
+				
+				printWriter.println("modifyDoctor");
+
+				printWriter.println("name");
+				printWriter.println(new_name);
+
+				printWriter.println(dmodif.toString());
+			
+			
+			
+			
+			
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Empty field");
@@ -147,17 +252,43 @@ public class ModifyDoctorDataController {
 
 	@FXML
 	void modifypass(ActionEvent event) {
+		
+		
+		
+		try {
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+			inputStream = Main.getSocket().getInputStream();
+
+			outputStream = Main.getSocket().getOutputStream();
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		
+		
+		
 
 		if (!newpasstf.getText().equals("") && !oldpastf.getText().equals("")) {
 			String newpass = newpasstf.getText();
 			boolean catchdone = false;
 
-			Main.getInter().disconnect();
-			Main.getUserman().connect();
-			catchdone = Main.getUserman().updateUserPassword(oldusername.getText(), newpass, oldpastf.getText(),
-					catchdone);
-			Main.getUserman().disconnect();
-			Main.getInter().connect();
+			printWriter.println("modifyDPASSWORD");
+			printWriter.println(newpass);
+			printWriter.println(oldpastf.getText());
+			printWriter.println(oldusername.getText());
+			
+			try {
+				catchdone = Boolean.parseBoolean(bufferedReader.readLine());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 			if (catchdone == false) {
 				JOptionPane.showMessageDialog(null, "Password changed");
 			}
@@ -172,34 +303,63 @@ public class ModifyDoctorDataController {
 
 	@FXML
 	void modifyuser(ActionEvent event) {
+		
+		
+		try {
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+			inputStream = Main.getSocket().getInputStream();
+
+			outputStream = Main.getSocket().getOutputStream();
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		
+		
 		String newUserName = modifyusername.getText();
 		String oldUName = oldusername.getText();
 		
 		try {
-		Main.getInter().disconnect();
-		Main.getUserman().connect();
+	
 		if (!newUserName.equals("")) {
-			if (Main.getUserman().checkEmail(newUserName)) {
+			
+			
+			
+			printWriter.println("checkEmail");
+			printWriter.println(newUserName);
+
+			if (Boolean.parseBoolean(bufferedReader.readLine())) {
 				JOptionPane.showMessageDialog(null, "Email already used, try to log in");
 
-			} else {
-			oldusername.setText(newUserName);
+			} else {	
+				
 
-			
-			Main.getUserman().updateUserMailWithoutpass(newUserName, oldUName);
+				oldusername.setText(newUserName);
 
-			
+				printWriter.println("modifyDUSER");
+				printWriter.println(newUserName);
+				printWriter.println(oldUName);
 
-			modifyusername.setText("");
 
-			JOptionPane.showMessageDialog(null, "Username changed");
+				modifyusername.setText("");
+
+				JOptionPane.showMessageDialog(null, "Username changed");
 			}
+
+
+
+		
+		
+		
 		} else {
 			JOptionPane.showMessageDialog(null, "Empty field");
 
 		}
-		Main.getUserman().disconnect();
-		Main.getInter().connect();
+
 	}catch(Exception e) {
 		JOptionPane.showMessageDialog(null, "Error, try again.");
 
@@ -241,4 +401,31 @@ public class ModifyDoctorDataController {
 		OldHospi.setText(oldHospi);
 	}
 
+	
+	private static void releaseResourcesClient(PrintWriter printWriter, BufferedReader bufferedReader,
+			OutputStream outputStream, InputStream inputStream ) {
+		try {
+			printWriter.close();
+		} catch (Exception ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			bufferedReader.close();
+		} catch (Exception ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		try {
+			outputStream.close();
+		} catch (IOException ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			inputStream.close();
+		} catch (IOException ex) {
+			Logger.getLogger(MainMenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+	}
+	
 }
