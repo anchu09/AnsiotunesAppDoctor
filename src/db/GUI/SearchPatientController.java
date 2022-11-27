@@ -99,6 +99,24 @@ public class SearchPatientController implements Initializable {
 
 	@FXML
 	void usethetable(ActionEvent event) {
+		
+		
+		try {
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+			inputStream = Main.getSocket().getInputStream();
+
+			outputStream = Main.getSocket().getOutputStream();
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		
+		
+		
 		this.tablePatients.setDisable(false);
 		this.modifybutton.setDisable(false);
 		this.modifybutton.setVisible(true);
@@ -119,7 +137,7 @@ public class SearchPatientController implements Initializable {
 		List<Patient> allpatients = new ArrayList<Patient>();
 		
 		printWriter.println("getAllPatientsTableDoctors");
-		Doctor d=null;
+		printWriter.println(d.toString());
 		try {
 			int len= Integer.parseInt(bufferedReader.readLine());
 			for (int i = 0; i < len; i++) {

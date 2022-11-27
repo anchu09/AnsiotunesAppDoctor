@@ -108,7 +108,7 @@ public class DoctorMenuController {
 								
 			
 			String username= bufferedReader.readLine();
-			
+			System.out.println("el user"+d.toString());
 			controller.setOldusername(username);			
 			
 			

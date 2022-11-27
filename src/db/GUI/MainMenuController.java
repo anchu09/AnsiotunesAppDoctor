@@ -318,7 +318,7 @@ public class MainMenuController implements Initializable {
 			Scene scene = new Scene(root);
 			Stage stage = new Stage();
 			stage.setResizable(false);
-			stage.setTitle("Ansiotunes");
+			stage.setTitle("Ansiotunes DOCTOR");
 
 			stage.setTitle("Delete account");
 			stage.initModality(Modality.APPLICATION_MODAL);

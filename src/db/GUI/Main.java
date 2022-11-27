@@ -63,13 +63,13 @@ public class Main extends Application {
 			primaryStage.getIcons().add(new Image(
 					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrdhgX8t_xOqHLNFJTcdUaEMCyc5-NwN7dhQ&usqp=CAU"));
 
-			primaryStage.setTitle("Ansiotunes");
+			primaryStage.setTitle("Ansiotunes DOCTOR");
 
 			primaryStage.show();
 		} catch (Exception e) {
 //			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Server inactive.");
-
+System.exit(0);
 		}
 	}
 

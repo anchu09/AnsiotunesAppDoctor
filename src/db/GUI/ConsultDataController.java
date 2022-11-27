@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -83,6 +87,12 @@ public class ConsultDataController {
 	public Label getScoreLabel() {
 		return scoreLabel;
 	}
+	
+	
+	 PrintWriter printWriter =null;
+		InputStream inputStream = null;
+		BufferedReader bufferedReader = null;
+		OutputStream outputStream = null;
 
 	public void setScoreLabel(String content) {
 		scoreLabel.setText(content);
@@ -90,15 +100,62 @@ public class ConsultDataController {
 
 	@FXML
 	void ECGButton(ActionEvent event) {
+		
+		
+		
+		
+		try {
+	    	printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+	    	inputStream = Main.getSocket().getInputStream();
+//			objectInputStream = new ObjectInputStream(inputStream);
+
+			outputStream = Main.getSocket().getOutputStream();
+//			objectOutputStream = new ObjectOutputStream(outputStream);
+
+
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+			}catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+			}
+		
+		
 
 		// plotTittle.setText("ECG for " + choiceBoxReports.getValue());
 		lineChart.setTitle("ECG for " + choiceBoxReports.getValue());
-		ArrayList<Integer> datos = leerfichero("../AnsiotunesAppDoctor/reports/" + choiceBoxReports.getValue(), "ecg");
+//		ArrayList<Integer> datos = leerfichero("../AnsiotunesAppDoctor/reports/" + choiceBoxReports.getValue(), "ecg");
+		
+		printWriter.println("leerfichero");
+		printWriter.println("../AnsioTunesServer/reports/" + choiceBoxReports.getValue());
+		printWriter.println("ecg");
+		int len =0;
+		ArrayList<Integer> datos = new ArrayList<Integer>();
+
+		try {
+			 len = 		Integer.parseInt(bufferedReader.readLine());
+			 
+			 for (int i=0;i<len;i++) {
+			
+			datos.add(Integer.parseInt(bufferedReader.readLine()));
+
+		}
+			 
+		} catch (NumberFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		
+		
 		series = new XYChart.Series();
 		series.getData().clear();
 		lineChart.getData().clear();
 
-		// int tam= datos.size();
+//		 int tam= datos.size();
 		int tam = 1000;
 
 		for (int i = 0; i < tam; i++) {
@@ -112,15 +169,66 @@ public class ConsultDataController {
 	@FXML
 	void EDAButton(ActionEvent event) {
 
+		
+		try {
+	    	printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+	    	inputStream = Main.getSocket().getInputStream();
+//			objectInputStream = new ObjectInputStream(inputStream);
+
+			outputStream = Main.getSocket().getOutputStream();
+//			objectOutputStream = new ObjectOutputStream(outputStream);
+
+
+			printWriter = new PrintWriter(Main.getSocket().getOutputStream(), true);
+
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+			}catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+			}
+		
+		
+		
 		lineChart.setTitle("EDA for " + choiceBoxReports.getValue());
 
 		// plotTittle.setText("EDA for " + choiceBoxReports.getValue());
 		
-		ArrayList<Integer> datos = leerfichero("../AnsiotunesAppDoctor/reports/" + choiceBoxReports.getValue(), "eda");
+		
+		
+		
+//		ArrayList<Integer> datos = leerfichero("../AnsiotunesAppDoctor/reports/" + choiceBoxReports.getValue(), "eda");
+		
+
+		printWriter.println("leerfichero");
+		printWriter.println("../AnsioTunesServer/reports/" + choiceBoxReports.getValue());
+		printWriter.println("eda");
+		int len =0;
+		ArrayList<Integer> datos = new ArrayList<Integer>();
+
+		try {
+			 len = 		Integer.parseInt(bufferedReader.readLine());
+			 
+			 for (int i=0;i<len;i++) {
+			
+			datos.add(Integer.parseInt(bufferedReader.readLine()));
+
+		}
+			 
+		} catch (NumberFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		
+		
+		
+		
 		series = new XYChart.Series();
 		lineChart.getData().clear();
 		series.getData().clear();
-		// int tam= datos.size();
+//		 int tam= datos.size();
 		int tam = 1000;
 		for (int i = 0; i < tam; i++) {
 			series.getData().add(new XYChart.Data("" + i, datos.get(i)));
@@ -131,58 +239,6 @@ public class ConsultDataController {
 
 	}
 
-	public static ArrayList<Integer> leerfichero(String ruta, String tipo) {
-		ArrayList<Integer> datos = new ArrayList<Integer>();
-		BufferedReader br = null;
-		try {
-
-			FileReader fr = new FileReader(ruta);
-			br = new BufferedReader(fr);
-
-			String leido = "";
-			int contador = 0;
-			while (leido != null) {
-
-				leido = br.readLine();
-				if (leido.length() > 5) {
-					if (tipo.compareTo("ecg") == 0) {
-
-						String ecg = leido.substring(saberespacio(leido, 3) + 1, saberespacio(leido, 4) - 1);
-
-						datos.add(Integer.parseInt(ecg));
-					} else {
-
-						String eda = leido.substring(saberespacio(leido, 4) + 1, saberespacio(leido, 5) - 1);
-
-						datos.add(Integer.parseInt(eda));
-
-					}
-				}
-
-			}
-
-			System.out.println("he salido");
-
-		} catch (FileNotFoundException ex1) {
-			System.out.println("archivo no encontrado");
-		} catch (IOException ex1) {
-			System.out.println("error");
-		} catch (NullPointerException ex1) {
-			System.out.println("");
-		} finally {
-			try {
-				if (br != null) {
-					br.close();
-				}
-			} catch (Exception ex) {
-				System.out.println("Error al cerrar el fichero");
-				ex.printStackTrace();
-			}
-		}
-
-		return datos;
-
-	}
 
 	@FXML
 	void backfromstatistics(ActionEvent event) {
@@ -220,30 +276,10 @@ public class ConsultDataController {
 		choiceBoxReports.getItems().clear();
 
 		for (int i = 0; i < listaArchivos.size(); i++) {
-			choiceBoxReports.getItems().add(listaArchivos.get(i).toString().substring(22));
+			choiceBoxReports.getItems().add(listaArchivos.get(i).toString().substring(28));
 		}
 
 	}
 
-	public static int saberespacio(String cadena, int numeroespacio) {
-		int contadorespacios = 0;
-		int posicion = 0;
-		boolean pasonombre = false;
-
-		for (int i = 0; i < cadena.length(); i++) {
-
-			if (cadena.charAt(i) == ' ') {
-				contadorespacios++;
-
-			}
-			if (contadorespacios == numeroespacio) {
-				break;
-			}
-
-			posicion++;
-		}
-
-		return posicion;
-	}
 
 }

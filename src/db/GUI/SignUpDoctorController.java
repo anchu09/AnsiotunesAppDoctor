@@ -166,7 +166,7 @@ public class SignUpDoctorController implements Initializable {
 							int id = 0;
 							Doctor d_new = new Doctor(name, colnum, hospital);
 							printWriter.println("oncreateuserDoc");
-
+							System.out.println(d_new.toString());
 							printWriter.println(d_new.toString());
 							printWriter.println(doctoremail);
 							printWriter.println(doctorPassword);
