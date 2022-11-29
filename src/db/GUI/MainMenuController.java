@@ -145,14 +145,21 @@ public class MainMenuController implements Initializable {
 		String idText = null;
 		Integer id = null;
 		User u = null;
+		String control=null;
+
 		try {
+			control = bufferedReader.readLine();
+if(control.contains("null")) {
+	System.out.println("es null");
+}else {
+	rolename = bufferedReader.readLine();
+	Role r = new Role(rolename);
 
-			rolename = bufferedReader.readLine();
-			Role r = new Role(rolename);
-
-			String userText = bufferedReader.readLine();
-			System.out.println(userText);
-			u = new User(userText, r);
+	String userText = bufferedReader.readLine();
+	System.out.println(userText);
+	u = new User(userText, r);
+}
+		
 
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block

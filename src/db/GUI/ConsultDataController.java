@@ -156,7 +156,7 @@ public class ConsultDataController {
 		lineChart.getData().clear();
 
 //		 int tam= datos.size();
-		int tam = 1000;
+		int tam = 300;
 
 		for (int i = 0; i < tam; i++) {
 			series.getData().add(new XYChart.Data("" + i, datos.get(i)));
@@ -229,7 +229,7 @@ public class ConsultDataController {
 		lineChart.getData().clear();
 		series.getData().clear();
 //		 int tam= datos.size();
-		int tam = 1000;
+		int tam = 300;
 		for (int i = 0; i < tam; i++) {
 			series.getData().add(new XYChart.Data("" + i, datos.get(i)));
 

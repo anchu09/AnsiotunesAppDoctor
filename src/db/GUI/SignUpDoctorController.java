@@ -152,8 +152,11 @@ public class SignUpDoctorController implements Initializable {
 				printWriter.println("checkEmail");
 				printWriter.println(EmaDcotorText.getText());
 
+				
 				try {
-					if (Boolean.parseBoolean(bufferedReader.readLine())) {
+					
+					boolean checkin=Boolean.parseBoolean(bufferedReader.readLine());
+					if (checkin) {
 						JOptionPane.showMessageDialog(null, "Email already used, try to log in");
 
 					} else {

@@ -167,6 +167,7 @@ public class SearchPatientController implements Initializable {
 
 	@FXML
 	void ModifySearch(ActionEvent event) {
+		pselected=null;
 		
 		
 		
