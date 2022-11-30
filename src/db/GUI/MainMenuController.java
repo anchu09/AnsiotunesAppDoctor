@@ -302,46 +302,6 @@ if(control.contains("null")) {
 	}
 
 	@FXML
-	void onDeleteAccountPress(ActionEvent event) {
-
-		String name = "deleteacView.fxml";
-		deleteacController controller = null;
-		try {
-
-			Pane root0 = (Pane) this.PasswordTextField.getScene().getRoot();
-
-			ColorAdjust adj = new ColorAdjust(0, -0.9, -0.5, 0);
-
-			GaussianBlur blur = new GaussianBlur(10);
-			adj.setInput(blur);
-			root0.setEffect(adj);
-
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(name));
-			Parent root;
-
-			root = loader.load();
-			controller = loader.getController();
-
-			Scene scene = new Scene(root);
-			Stage stage = new Stage();
-			stage.setResizable(false);
-			stage.setTitle("Ansiotunes DOCTOR");
-
-			stage.setTitle("Delete account");
-			stage.initModality(Modality.APPLICATION_MODAL);
-			stage.setScene(scene);
-			stage.getIcons().add(new Image(
-					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrdhgX8t_xOqHLNFJTcdUaEMCyc5-NwN7dhQ&usqp=CAU"));
-
-			stage.showAndWait();
-			root0.setEffect(null);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	
 	private static void releaseResourcesClient(PrintWriter printWriter, BufferedReader bufferedReader,
 			OutputStream outputStream, InputStream inputStream, Socket socket) {
