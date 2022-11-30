@@ -72,11 +72,11 @@
             </Label>
             <PasswordField fx:id="PasswordTextField" layoutX="257.0" layoutY="331.0" prefHeight="27.0" prefWidth="267.0" />
             <TextField fx:id="UserTextField" layoutX="250.0" layoutY="251.0" prefHeight="26.0" prefWidth="275.0" />
-            <Button layoutX="255.0" layoutY="376.0" mnemonicParsing="false" onAction="#OnSignUpClick" prefHeight="32.0" prefWidth="79.0" text="Register" textFill="#2f5569">
+            <Button layoutX="296.0" layoutY="376.0" mnemonicParsing="false" onAction="#OnSignUpClick" prefHeight="32.0" prefWidth="79.0" text="Register" textFill="#2f5569">
                <font>
                   <Font name="Times New Roman" size="17.0" />
                </font></Button>
-            <Button layoutX="357.0" layoutY="376.0" mnemonicParsing="false" onAction="#OnEnterUser" prefHeight="32.0" prefWidth="74.0" text="Enter" textFill="#2f5569">
+            <Button layoutX="397.0" layoutY="376.0" mnemonicParsing="false" onAction="#OnEnterUser" prefHeight="32.0" prefWidth="74.0" text="Enter" textFill="#2f5569">
                <font>
                   <Font name="Times New Roman" size="17.0" />
                </font></Button>
@@ -94,16 +94,11 @@
                   <Font name="Times New Roman" size="13.0" />
                </font>
             </Label>
-            <Label layoutX="241.0" layoutY="408.0" text="Create new account?">
+            <Label layoutX="280.0" layoutY="408.0" text="Create new account?">
                <font>
                   <Font name="Times New Roman" size="13.0" />
                </font>
             </Label>
-            <Button layoutX="451.0" layoutY="376.0" mnemonicParsing="false" onAction="#onDeleteAccountPress" prefHeight="32.0" prefWidth="74.0" text="Delete" textFill="#2f5569">
-               <font>
-                  <Font name="Times New Roman" size="17.0" />
-               </font>
-            </Button>
       </children>
     </AnchorPane>
   </children>
